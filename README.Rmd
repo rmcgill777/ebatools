@@ -15,45 +15,68 @@ knitr::opts_chunk$set(
 
 # ebaTools
 
-<!-- badges: start -->
-<!-- badges: end -->
-
-The goal of ebaTools is to ...
+`ebaTools` provides functions for evidence-based assessment of diagnostic
+tests. The package includes tools for calculating diagnostic accuracy
+statistics, performing Bayesian updating, interpreting likelihood ratios,
+and visualizing results with a Fagan nomogram.
 
 ## Installation
 
-You can install the development version of ebaTools like so:
+### CRAN
 
-``` r
-# FILL THIS IN! HOW CAN PEOPLE INSTALL YOUR DEV PACKAGE?
+```r
+install.packages("ebaTools")
+```
+
+### Development version
+
+```r
+# install.packages("remotes")
+remotes::install_github("rmcgill777/ebaTools")
 ```
 
 ## Example
 
-This is a basic example which shows you how to solve a common problem:
-
-```{r example}
+```{r}
 library(ebaTools)
-## basic example code
+
+# Calculate diagnostic accuracy statistics
+stats <- eba_stats(
+  tp = 45,
+  fp = 12,
+  fn = 5,
+  tn = 138
+)
+
+stats
+
+# Update pretest probability using likelihood ratios
+results <- bayes_update(
+  pretest_probability = 0.30,
+  lr_positive = 6,
+  lr_negative = 0.25
+)
+
+results
+
+# Interpret the positive post-test probability
+eba_interpretation(
+  post_probability = results$post_positive
+)
+
+# Create a Fagan nomogram
+fagan_nomogram(
+  pretest_probability = 0.30,
+  lr_positive = 6,
+  lr_negative = 0.25
+)
 ```
 
-What is special about using `README.Rmd` instead of just `README.md`? You can include R chunks like so:
+## Main Functions
 
-```{r cars}
-summary(cars)
-```
-
-You'll still need to render `README.Rmd` regularly, to keep `README.md` up-to-date. `devtools::build_readme()` is handy for this.
-
-You can also embed plots, for example:
-
-```{r pressure, echo = FALSE}
-plot(pressure)
-```
-
-In that case, don't forget to commit and push the resulting figure files, so they display on GitHub and CRAN.
-
-usethis::use_roxygen_md()
-1
-
-R/diagnostics.R
+| Function | Description |
+|----------|-------------|
+| `eba_stats()` | Calculate diagnostic accuracy statistics from a 2 × 2 contingency table. |
+| `bayes_update()` | Update disease probability using Bayes' theorem and a likelihood ratio. |
+| `eba_interpretation()` | Provide an evidence-based interpretation of likelihood ratios. |
+| `fagan_nomogram()` | Visualize Bayesian updating with a Fagan nomogram. |
